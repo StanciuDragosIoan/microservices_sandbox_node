@@ -76,7 +76,9 @@ async function postData(url = '', data = {}) {
     const orderProduct = (event) => {
         console.log(event.target);
         const id = event.target.previousSibling.innerText;
-        postData('http://localhost:8000/', { id })
+        const price = event.target.previousSibling.previousSibling.innerText.split(' ')[0];
+        console.log(price);
+        postData('http://localhost:8000/', { id, price })
         .then(data => {
             console.log(data); 
         });

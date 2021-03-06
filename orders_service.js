@@ -17,9 +17,10 @@ app.use(cors());
 
 let orders = [];
 
-const clearOrders = () => {
-  let orders = [];
-};
+app.get("/deleteAll", (req, res) => {
+  orders = [];
+  res.end("orders deleted");
+});
 
 app.get("/", (req, res) => {
   let output = "";
@@ -29,17 +30,27 @@ app.get("/", (req, res) => {
       "<p> The product with the id: " +
       o.productId +
       " has been ordered</p> " +
-      "</div>";
+      "<p>The product price is: " +
+      o.price +
+      "</p>" +
+      "</div>" +
+      "<hr style='width:30vw; margin-left:0;'>";
   });
 
+  // console.log(orders);
   res.end(`
       <h1>
         Current Orders
       </h1>
       <div id="output"></div>
-      <button onClick=${clearOrders()}>
+      <button id='orderBtn'>
         Clear old orders
       </button>
+      <script>
+      document.querySelector("#orderBtn").addEventListener('click',() => {
+        window.location.href = 'http://localhost:8000/deleteAll';
+      });
+      </script>
       ${output}
       
   `);
@@ -47,7 +58,7 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   console.log(req.body);
-  orders.push({ productId: req.body.id });
+  orders.push({ productId: req.body.id, price: req.body.price });
   res.json({ msg: "order Processed Successfully..." });
   console.log(orders);
   // res.end("new order");
